@@ -11,7 +11,7 @@ export function Input({ style, ...rest }: TextInputProps) {
       style={[
         styles.input,
         {
-          backgroundColor: theme.surfaceSecondary,
+          backgroundColor: theme.background,
           color: theme.text,
           borderColor: theme.border,
         },
@@ -24,8 +24,8 @@ export function Input({ style, ...rest }: TextInputProps) {
 
 const styles = StyleSheet.create({
   input: {
-    height: 52,
-    borderRadius: 12,
+    height: 56,
+    borderRadius: 14,
     borderWidth: 1,
     paddingHorizontal: 16,
     fontSize: 16,

@@ -17,11 +17,11 @@ const DEMO_FOODS: FoodItem[] = [
   { name: 'Arroz blanco cocido', calories: 130, protein: 2.7, carbs: 28, fat: 0.3, portion: '100g' },
   { name: 'Huevo entero', calories: 155, protein: 13, carbs: 1.1, fat: 11, portion: '100g' },
   { name: 'Avena cruda', calories: 389, protein: 16.9, carbs: 66, fat: 6.9, portion: '100g' },
-  { name: 'Plátano', calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3, portion: '100g' },
-  { name: 'Salmón', calories: 208, protein: 20, carbs: 0, fat: 13, portion: '100g' },
-  { name: 'Brócoli', calories: 34, protein: 2.8, carbs: 7, fat: 0.4, portion: '100g' },
+  { name: 'Platano', calories: 89, protein: 1.1, carbs: 22.8, fat: 0.3, portion: '100g' },
+  { name: 'Salmon', calories: 208, protein: 20, carbs: 0, fat: 13, portion: '100g' },
+  { name: 'Brocoli', calories: 34, protein: 2.8, carbs: 7, fat: 0.4, portion: '100g' },
   { name: 'Patata cocida', calories: 87, protein: 1.9, carbs: 20, fat: 0.1, portion: '100g' },
-  { name: 'Atún en lata', calories: 116, protein: 26, carbs: 0, fat: 1, portion: '100g' },
+  { name: 'Atun en lata', calories: 116, protein: 26, carbs: 0, fat: 1, portion: '100g' },
   { name: 'Yogur griego', calories: 59, protein: 10, carbs: 3.6, fat: 0.4, portion: '100g' },
   { name: 'Pan integral', calories: 247, protein: 13, carbs: 41, fat: 3.4, portion: '100g' },
   { name: 'Aguacate', calories: 160, protein: 2, carbs: 8.5, fat: 14.7, portion: '100g' },
@@ -49,9 +49,9 @@ export function FoodSearch({ onSelect }: Props) {
         value={query}
         onChangeText={setQuery}
         style={{
-          height: 48,
-          borderRadius: 12,
-          backgroundColor: theme.surfaceSecondary,
+          height: 56,
+          borderRadius: 14,
+          backgroundColor: theme.background,
           color: theme.text,
           paddingHorizontal: 16,
           fontSize: 16,

@@ -27,7 +27,6 @@ export function ExerciseCard({ exercise, sets, restSeconds, previousSets, onComp
     if (updated.length < sets) {
       setIsResting(true);
       setRestTime(restSeconds);
-      // Simple countdown
       let t = restSeconds;
       const interval = setInterval(() => {
         t -= 1;
@@ -45,11 +44,10 @@ export function ExerciseCard({ exercise, sets, restSeconds, previousSets, onComp
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Card style={{ marginBottom: 12 }}>
+    <Card style={{ marginBottom: 16 }}>
       <TouchableOpacity onPress={() => setExpanded(!expanded)}>
         <View style={styles.header}>
-          {/* Placeholder for exercise image */}
-          <View style={[styles.imagePlaceholder, { backgroundColor: theme.surfaceSecondary }]}>
+          <View style={[styles.imagePlaceholder, { backgroundColor: theme.surfaceActive }]}>
             {exercise.image_url ? (
               <Image source={{ uri: exercise.image_url }} style={styles.image} resizeMode="contain" />
             ) : (
@@ -59,9 +57,9 @@ export function ExerciseCard({ exercise, sets, restSeconds, previousSets, onComp
             )}
           </View>
           <View style={{ flex: 1, marginLeft: 12 }}>
-            <ThemedText variant="subtitle">{exercise.name}</ThemedText>
+            <ThemedText variant="h3">{exercise.name}</ThemedText>
             <ThemedText variant="caption" color={theme.textSecondary}>
-              {exercise.muscle_group} • {sets} sets • {restSeconds}s rest
+              {exercise.muscle_group} · {sets} sets · {restSeconds}s rest
             </ThemedText>
             {exercise.instructions && (
               <ThemedText variant="caption" color={theme.textTertiary} numberOfLines={2}>
@@ -107,13 +105,13 @@ const styles = StyleSheet.create({
   imagePlaceholder: {
     width: 80,
     height: 80,
-    borderRadius: 12,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
   },
   image: {
     width: 80,
     height: 80,
-    borderRadius: 12,
+    borderRadius: 14,
   },
 });

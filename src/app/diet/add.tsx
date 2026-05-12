@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Modal, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FontAwesome6 } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Button } from '@/components/ui/Button';
 import { FoodSearch } from '@/components/diet/FoodSearch';
@@ -47,9 +48,9 @@ export default function AddFoodScreen() {
     return (
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.header}>
-          <ThemedText variant="title">Añadir comida</ThemedText>
+          <ThemedText variant="h2">Anadir comida</ThemedText>
           <TouchableOpacity onPress={() => router.back()}>
-            <ThemedText variant="subtitle" color={theme.textTertiary}>✕</ThemedText>
+            <FontAwesome6 name="xmark" size={20} color={theme.textTertiary} />
           </TouchableOpacity>
         </View>
         <FoodSearch onSelect={setSelectedFood} />
@@ -60,7 +61,7 @@ export default function AddFoodScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
-        <ThemedText variant="title">{selectedFood.name}</ThemedText>
+        <ThemedText variant="h2">{selectedFood.name}</ThemedText>
         <TouchableOpacity onPress={() => setSelectedFood(null)}>
           <ThemedText variant="body" color={theme.textTertiary}>Cambiar</ThemedText>
         </TouchableOpacity>
@@ -74,8 +75,8 @@ export default function AddFoodScreen() {
           keyboardType="number-pad"
           style={{
             height: 56,
-            borderRadius: 12,
-            backgroundColor: theme.surfaceSecondary,
+            borderRadius: 14,
+            backgroundColor: theme.background,
             color: theme.text,
             fontSize: 24,
             fontWeight: '600',
@@ -87,7 +88,7 @@ export default function AddFoodScreen() {
         />
 
         <View style={{ marginTop: 24 }}>
-          <ThemedText variant="label" color={theme.textTertiary}>MOMENTO DEL DÍA</ThemedText>
+          <ThemedText variant="label" color={theme.textTertiary}>MOMENTO DEL DIA</ThemedText>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 }}>
             {mealOptions.map((opt) => (
               <TouchableOpacity
@@ -96,8 +97,8 @@ export default function AddFoodScreen() {
                 style={{
                   paddingHorizontal: 16,
                   paddingVertical: 10,
-                  borderRadius: 20,
-                  backgroundColor: mealType === opt.key ? theme.primary : theme.surfaceSecondary,
+                  borderRadius: 14,
+                  backgroundColor: mealType === opt.key ? theme.primary : theme.background,
                   borderWidth: 1,
                   borderColor: mealType === opt.key ? theme.primary : theme.border,
                 }}
@@ -114,7 +115,7 @@ export default function AddFoodScreen() {
         </View>
 
         <View style={{ marginTop: 24, alignItems: 'center' }}>
-          <ThemedText variant="title" color={theme.primary}>
+          <ThemedText variant="statSmall" color={theme.primary}>
             {Math.round(selectedFood.calories * (parseFloat(grams) || 100) / 100)} kcal
           </ThemedText>
           <ThemedText variant="caption" color={theme.textSecondary}>

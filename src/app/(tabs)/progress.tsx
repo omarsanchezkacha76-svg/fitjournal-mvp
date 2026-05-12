@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -26,19 +28,22 @@ export default function ProgressScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.primary }]}>
-        <ThemedText variant="title" color="#FFFFFF">Progreso</ThemedText>
-        <ThemedText variant="caption" color="rgba(255,255,255,0.8)">Últimas 6 semanas</ThemedText>
-      </View>
+      <LinearGradient
+        colors={[theme.surface, theme.background]}
+        style={styles.header}
+      >
+        <ThemedText variant="h1">Progreso</ThemedText>
+        <ThemedText variant="caption" color={theme.textSecondary}>Ultimas 6 semanas</ThemedText>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Volume Chart Card */}
         <Card style={{ marginBottom: 16, marginTop: -20 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            <View style={[styles.iconCircle, { backgroundColor: theme.primaryLight }]}>
-              <ThemedText style={{ fontSize: 18 }}>📊</ThemedText>
+            <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
+              <FontAwesome6 name="chart-column" size={16} color={theme.primary} />
             </View>
-            <ThemedText variant="subtitle" style={{ marginLeft: 12 }}>Volumen semanal</ThemedText>
+            <ThemedText variant="h3" style={{ marginLeft: 12 }}>Volumen semanal</ThemedText>
           </View>
           <View style={styles.chartContainer}>
             {VOLUME_DATA.map((item, index) => {
@@ -65,11 +70,11 @@ export default function ProgressScreen() {
           <View style={styles.volumeStats}>
             <View>
               <ThemedText variant="caption" color={theme.textSecondary}>Total</ThemedText>
-              <ThemedText variant="subtitle">87,000 kg</ThemedText>
+              <ThemedText variant="h3">87,000 kg</ThemedText>
             </View>
             <View>
-              <ThemedText variant="caption" color={theme.textSecondary}>+vs última</ThemedText>
-              <ThemedText variant="subtitle" color={theme.success}>+9.4%</ThemedText>
+              <ThemedText variant="caption" color={theme.textSecondary}>+vs ultima</ThemedText>
+              <ThemedText variant="h3" color={theme.success}>+9.4%</ThemedText>
             </View>
           </View>
         </Card>
@@ -77,10 +82,10 @@ export default function ProgressScreen() {
         {/* Lift Progress Card */}
         <Card style={{ marginBottom: 16 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            <View style={[styles.iconCircle, { backgroundColor: theme.successLight }]}>
-              <ThemedText style={{ fontSize: 18 }}>🏆</ThemedText>
+            <View style={[styles.iconCircle, { backgroundColor: theme.successDim }]}>
+              <FontAwesome6 name="trophy" size={16} color={theme.success} />
             </View>
-            <ThemedText variant="subtitle" style={{ marginLeft: 12 }}>Progreso en ejercicios</ThemedText>
+            <ThemedText variant="h3" style={{ marginLeft: 12 }}>Progreso en ejercicios</ThemedText>
           </View>
           <View style={{ gap: 20 }}>
             {LIFT_PROGRESS.map((lift, index) => {
@@ -93,7 +98,7 @@ export default function ProgressScreen() {
                     <ThemedText variant="body">{lift.exercise}</ThemedText>
                     <ThemedText variant="caption" color={theme.success}>+{progress.toFixed(0)}%</ThemedText>
                   </View>
-                  <View style={styles.progressBar}>
+                  <View style={[styles.progressBar, { backgroundColor: theme.border }]}>
                     <View
                       style={[
                         styles.progressFill,
@@ -121,27 +126,27 @@ export default function ProgressScreen() {
         {/* Stats Grid */}
         <View style={styles.statsGrid}>
           <Card style={{ flex: 1 }}>
-            <ThemedText style={{ fontSize: 24 }}>💪</ThemedText>
+            <FontAwesome6 name="dumbbell" size={20} color={theme.primary} />
             <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Entrenamientos</ThemedText>
-            <ThemedText variant="title" style={{ marginTop: 4 }}>24</ThemedText>
+            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>24</ThemedText>
           </Card>
           <Card style={{ flex: 1 }}>
-            <ThemedText style={{ fontSize: 24 }}>🔥</ThemedText>
+            <FontAwesome6 name="bolt" size={20} color={theme.warning} />
             <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Racha actual</ThemedText>
-            <ThemedText variant="title" style={{ marginTop: 4 }}>5 días</ThemedText>
+            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>5 dias</ThemedText>
           </Card>
         </View>
 
         <View style={styles.statsGrid}>
           <Card style={{ flex: 1 }}>
-            <ThemedText style={{ fontSize: 24 }}>⚡</ThemedText>
+            <FontAwesome6 name="layer-group" size={20} color={theme.accent} />
             <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Sets totales</ThemedText>
-            <ThemedText variant="title" style={{ marginTop: 4 }}>312</ThemedText>
+            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>312</ThemedText>
           </Card>
           <Card style={{ flex: 1 }}>
-            <ThemedText style={{ fontSize: 24 }}>⏱️</ThemedText>
+            <FontAwesome6 name="clock" size={20} color={theme.textSecondary} />
             <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Tiempo total</ThemedText>
-            <ThemedText variant="title" style={{ marginTop: 4 }}>18h</ThemedText>
+            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>18h</ThemedText>
           </Card>
         </View>
 
@@ -194,7 +199,7 @@ const styles = StyleSheet.create({
     marginTop: 24,
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E2E8F0',
+    borderTopColor: '#1E2A4A',
   },
   liftHeader: {
     flexDirection: 'row',
@@ -203,7 +208,6 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 8,
-    backgroundColor: '#E2E8F0',
     borderRadius: 4,
     marginTop: 10,
     overflow: 'hidden',

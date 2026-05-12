@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useAppStore } from '@/store/useAppStore';
 import type { Routine } from '@/types';
@@ -12,7 +15,7 @@ const PREDEFINED_ROUTINES: Routine[] = [
   {
     id: 'ppl-push',
     name: 'PPL — Push',
-    description: 'Pecho, hombros y tríceps',
+    description: 'Pecho, hombros y triceps',
     category: 'strength',
     difficulty: 'intermediate',
     is_predefined: true,
@@ -21,7 +24,7 @@ const PREDEFINED_ROUTINES: Routine[] = [
   {
     id: 'ppl-pull',
     name: 'PPL — Pull',
-    description: 'Espalda y bíceps',
+    description: 'Espalda y biceps',
     category: 'strength',
     difficulty: 'intermediate',
     is_predefined: true,
@@ -56,7 +59,7 @@ const PREDEFINED_ROUTINES: Routine[] = [
   },
   {
     id: 'calisthenics-basics',
-    name: 'Calistenia Básica',
+    name: 'Calistenia Basica',
     description: 'Push-ups, pull-ups, squats, core',
     category: 'calisthenics',
     difficulty: 'beginner',
@@ -74,7 +77,7 @@ const PREDEFINED_ROUTINES: Routine[] = [
   },
   {
     id: 'full-body-3x',
-    name: 'Full Body 3×',
+    name: 'Full Body 3x',
     description: 'Cuerpo completo 3 veces por semana',
     category: 'strength',
     difficulty: 'beginner',
@@ -94,12 +97,12 @@ export default function RoutinesScreen() {
     ? allRoutines.filter(r => r.is_predefined)
     : allRoutines.filter(r => !r.is_predefined);
 
-  function getDifficultyColor(difficulty: string) {
+  function getDifficultyColor(difficulty: string): 'success' | 'warning' | 'error' {
     switch (difficulty) {
-      case 'beginner': return '#10B981';
-      case 'intermediate': return '#F59E0B';
-      case 'advanced': return '#EF4444';
-      default: return theme.textSecondary;
+      case 'beginner': return 'success';
+      case 'intermediate': return 'warning';
+      case 'advanced': return 'error';
+      default: return 'success';
     }
   }
 
@@ -112,21 +115,17 @@ export default function RoutinesScreen() {
     }
   }
 
-  const categoryEmoji: Record<string, string> = {
-    strength: '🏋️',
-    calisthenics: '🤸',
-    cardio: '🏃',
-    mixed: '⚡',
-  };
-
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <View style={[styles.header, { backgroundColor: theme.primary }]}>
-        <ThemedText variant="title" color="#FFFFFF">Rutinas</ThemedText>
-        <ThemedText variant="caption" color="rgba(255,255,255,0.8)">
+      <LinearGradient
+        colors={[theme.surface, theme.background]}
+        style={styles.header}
+      >
+        <ThemedText variant="h1">Rutinas</ThemedText>
+        <ThemedText variant="caption" color={theme.textSecondary}>
           {filtered.length} rutinas disponibles
         </ThemedText>
-      </View>
+      </LinearGradient>
 
       {/* Tabs */}
       <View style={styles.tabs}>
@@ -166,15 +165,19 @@ export default function RoutinesScreen() {
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.9}>
             <Card style={{ marginBottom: 14 }}>
               <View style={styles.routineHeader}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={[styles.emojiCircle, { backgroundColor: theme.primaryLight }]}>
-                    <ThemedText style={{ fontSize: 20 }}>{categoryEmoji[item.category] || '💪'}</ThemedText>
+                  <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
+                    <FontAwesome6
+                      name={item.category === 'calisthenics' ? 'person-running' : 'dumbbell'}
+                      size={18}
+                      color={theme.primary}
+                    />
                   </View>
                   <View style={{ marginLeft: 14, flex: 1 }}>
-                    <ThemedText variant="subtitle">{item.name}</ThemedText>
+                    <ThemedText variant="h3">{item.name}</ThemedText>
                     <ThemedText variant="bodySecondary" style={{ marginTop: 2 }}>
                       {item.description}
                     </ThemedText>
@@ -182,11 +185,9 @@ export default function RoutinesScreen() {
                 </View>
               </View>
               <View style={styles.routineFooter}>
-                <View style={[styles.diffBadge, { backgroundColor: getDifficultyColor(item.difficulty) + '18' }]}>
-                  <ThemedText variant="caption" color={getDifficultyColor(item.difficulty)}>
-                    {getDifficultyLabel(item.difficulty)}
-                  </ThemedText>
-                </View>
+                <Badge color={getDifficultyColor(item.difficulty)}>
+                  {getDifficultyLabel(item.difficulty)}
+                </Badge>
                 <Button title="Empezar" size="small" onPress={() => router.push({ pathname: '/workout/active', params: { routineId: item.id } })} />
               </View>
             </Card>
@@ -234,17 +235,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  emojiCircle: {
+  iconCircle: {
     width: 48,
     height: 48,
-    borderRadius: 16,
+    borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  diffBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 5,
-    borderRadius: 20,
   },
   routineFooter: {
     flexDirection: 'row',

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FontAwesome6 } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -38,9 +39,9 @@ export default function LoginScreen() {
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
           <View style={[styles.logoCircle, { backgroundColor: theme.primary }]}>
-            <Text style={styles.logoIcon}>💪</Text>
+            <FontAwesome6 name="dumbbell" size={28} color="#FFFFFF" />
           </View>
-          <ThemedText variant="title" style={{ textAlign: 'center', marginTop: 24 }}>
+          <ThemedText variant="h1" style={{ textAlign: 'center', marginTop: 24 }}>
             FitJournal
           </ThemedText>
           <ThemedText variant="bodySecondary" style={{ textAlign: 'center', marginTop: 8 }}>
@@ -61,7 +62,7 @@ export default function LoginScreen() {
             onChangeText={setEmail}
           />
           <Input
-            placeholder="Contraseña"
+            placeholder="Contrasena"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -69,7 +70,7 @@ export default function LoginScreen() {
           />
 
           <Button
-            title={loading ? 'Entrando...' : 'Iniciar sesión'}
+            title={loading ? 'Entrando...' : 'Iniciar sesion'}
             onPress={handleLogin}
             disabled={loading}
             style={{ marginTop: 28 }}
@@ -80,8 +81,8 @@ export default function LoginScreen() {
             style={{ marginTop: 24, alignSelf: 'center' }}
           >
             <ThemedText variant="bodySecondary">
-              ¿No tienes cuenta?{' '}
-              <Text style={{ color: theme.primary, fontWeight: '700' }}>Regístrate</Text>
+              No tienes cuenta?{' '}
+              <Text style={{ color: theme.primary, fontWeight: '700' }}>Registrate</Text>
             </ThemedText>
           </TouchableOpacity>
 
@@ -118,9 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  logoIcon: {
-    fontSize: 32,
   },
   form: {
     gap: 0,

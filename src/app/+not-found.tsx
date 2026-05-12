@@ -10,8 +10,8 @@ export default function NotFoundScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <ThemedText variant="title" style={{ fontSize: 48 }}>404</ThemedText>
-      <ThemedText variant="subtitle" style={{ marginTop: 8 }}>
+      <ThemedText variant="hero" style={{ fontSize: 48 }}>404</ThemedText>
+      <ThemedText variant="h3" style={{ marginTop: 8 }}>
         Página no encontrada
       </ThemedText>
       <Link href="/(tabs)" asChild style={{ marginTop: 24 }}>

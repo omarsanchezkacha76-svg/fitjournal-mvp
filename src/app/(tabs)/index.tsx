@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
+import { FontAwesome6 } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
+import { MacroBar } from '@/components/ui/MacroBar';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useAppStore } from '@/store/useAppStore';
 import { formatDate, getTodayIso } from '@/lib/utils';
@@ -49,73 +52,62 @@ export default function TodayScreen() {
     snack: 'Snack',
   };
 
-  const mealIcons: Record<string, string> = {
-    breakfast: '☕',
-    lunch: '🍽️',
-    dinner: '🌙',
-    snack: '🍎',
-  };
-
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       {/* Gradient Header */}
-      <View style={[styles.headerGradient, { backgroundColor: theme.primary }]}>
+      <LinearGradient
+        colors={[theme.surface, theme.background]}
+        style={styles.headerGradient}
+      >
         <View style={styles.header}>
           <TouchableOpacity onPress={() => changeDay(-1)} style={styles.arrow}>
-            <ThemedText variant="subtitle" color="#FFFFFF">‹</ThemedText>
+            <FontAwesome6 name="chevron-left" size={18} color={theme.textSecondary} />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <ThemedText variant="subtitle" color="#FFFFFF">
+            <ThemedText variant="h2">
               {isToday ? 'Hoy' : formatDate(selectedDate)}
             </ThemedText>
             {isToday && (
-              <ThemedText variant="caption" color="rgba(255,255,255,0.7)">
+              <ThemedText variant="caption" color={theme.textSecondary}>
                 {formatDate(selectedDate)}
               </ThemedText>
             )}
           </View>
           <TouchableOpacity onPress={() => changeDay(1)} style={styles.arrow}>
-            <ThemedText variant="subtitle" color="#FFFFFF">›</ThemedText>
+            <FontAwesome6 name="chevron-right" size={18} color={theme.textSecondary} />
           </TouchableOpacity>
         </View>
 
         {/* Summary Stats Row */}
         <View style={styles.statsRow}>
-          <View style={styles.statBox}>
-            <ThemedText variant="title" color="#FFFFFF" style={{ fontSize: 28 }}>{totalCalories}</ThemedText>
-            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">kcal</ThemedText>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statBox}>
-            <ThemedText variant="title" color="#FFFFFF" style={{ fontSize: 28 }}>{Math.round(totalProtein)}g</ThemedText>
-            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">proteína</ThemedText>
-          </View>
-          <View style={styles.statDivider} />
-          <View style={styles.statBox}>
-            <ThemedText variant="title" color="#FFFFFF" style={{ fontSize: 28 }}>{Math.round(totalCarbs)}g</ThemedText>
-            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">carbs</ThemedText>
-          </View>
+          <MacroBar label="Kcal" value={totalCalories} max={2500} color={theme.primary} unit="" />
+          <View style={{ width: 16 }} />
+          <MacroBar label="Proteina" value={Math.round(totalProtein)} max={180} color={theme.accent} />
+          <View style={{ width: 16 }} />
+          <MacroBar label="Carbs" value={Math.round(totalCarbs)} max={300} color={theme.success} />
+          <View style={{ width: 16 }} />
+          <MacroBar label="Grasas" value={Math.round(totalFat)} max={80} color={theme.warning} />
         </View>
-      </View>
+      </LinearGradient>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Workout Card */}
         <Card style={{ marginBottom: 16, marginTop: -20 }}>
           <View style={styles.cardHeader}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={[styles.iconCircle, { backgroundColor: theme.primaryLight }]}>
-                <ThemedText style={{ fontSize: 20 }}>💪</ThemedText>
+              <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
+                <FontAwesome6 name="dumbbell" size={18} color={theme.primary} />
               </View>
               <View style={{ marginLeft: 12 }}>
-                <ThemedText variant="subtitle">Entrenamiento</ThemedText>
+                <ThemedText variant="h3">Entrenamiento</ThemedText>
                 <ThemedText variant="caption" color={theme.textTertiary}>
                   {journal.workout ? 'Completado' : 'Pendiente'}
                 </ThemedText>
               </View>
             </View>
             {journal.workout ? (
-              <View style={[styles.badge, { backgroundColor: theme.successLight }]}>
-                <ThemedText variant="caption" color={theme.success}>✓ Done</ThemedText>
+              <View style={[styles.badge, { backgroundColor: theme.successDim }]}>
+                <ThemedText variant="caption" color={theme.success}>Done</ThemedText>
               </View>
             ) : null}
           </View>
@@ -145,11 +137,11 @@ export default function TodayScreen() {
         <Card style={{ marginBottom: 16 }}>
           <View style={styles.cardHeader}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <View style={[styles.iconCircle, { backgroundColor: theme.successLight }]}>
-                <ThemedText style={{ fontSize: 20 }}>🥗</ThemedText>
+              <View style={[styles.iconCircle, { backgroundColor: theme.successDim }]}>
+                <FontAwesome6 name="utensils" size={16} color={theme.success} />
               </View>
               <View style={{ marginLeft: 12 }}>
-                <ThemedText variant="subtitle">Nutrición</ThemedText>
+                <ThemedText variant="h3">Nutricion</ThemedText>
                 <ThemedText variant="caption" color={theme.textTertiary}>
                   {journal.foods.length} alimentos registrados
                 </ThemedText>
@@ -167,18 +159,17 @@ export default function TodayScreen() {
           {Object.entries(foodsByMeal).map(([meal, foods]) => (
             <View key={meal} style={{ marginTop: 14 }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
-                <ThemedText style={{ fontSize: 14, marginRight: 6 }}>{mealIcons[meal]}</ThemedText>
                 <ThemedText variant="caption" color={theme.textTertiary}>
                   {mealLabels[meal].toUpperCase()}
                 </ThemedText>
               </View>
               {foods.length === 0 ? (
-                <ThemedText variant="bodySecondary" style={{ opacity: 0.5, marginLeft: 22 }}>
+                <ThemedText variant="bodySecondary" style={{ opacity: 0.5 }}>
                   —
                 </ThemedText>
               ) : (
                 foods.map((food, i) => (
-                  <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5, marginLeft: 22 }}>
+                  <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}>
                     <ThemedText variant="body" style={{ fontSize: 15 }}>{food.name} ({food.amount_grams}g)</ThemedText>
                     <ThemedText variant="body" color={theme.textSecondary} style={{ fontSize: 15 }}>{food.calories} kcal</ThemedText>
                   </View>
@@ -191,14 +182,14 @@ export default function TodayScreen() {
         {/* Notes Card */}
         <Card>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-            <View style={[styles.iconCircle, { backgroundColor: theme.primaryLight }]}>
-              <ThemedText style={{ fontSize: 18 }}>📝</ThemedText>
+            <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
+              <FontAwesome6 name="pen-to-square" size={16} color={theme.primary} />
             </View>
-            <ThemedText variant="subtitle" style={{ marginLeft: 12 }}>Notas del día</ThemedText>
+            <ThemedText variant="h3" style={{ marginLeft: 12 }}>Notas del dia</ThemedText>
           </View>
           <TextInput
             multiline
-            placeholder="¿Cómo te sentiste hoy? ¿Algo que destacar?"
+            placeholder="Notas del entrenamiento..."
             placeholderTextColor={theme.textTertiary}
             value={notes}
             onChangeText={(text) => {
@@ -209,7 +200,7 @@ export default function TodayScreen() {
               styles.notesInput,
               {
                 color: theme.text,
-                backgroundColor: theme.surfaceSecondary,
+                backgroundColor: theme.background,
                 borderColor: theme.border,
               },
             ]}
@@ -247,16 +238,7 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  statBox: {
-    alignItems: 'center',
-    flex: 1,
-  },
-  statDivider: {
-    width: 1,
-    height: 40,
-    backgroundColor: 'rgba(255,255,255,0.2)',
+    alignItems: 'flex-end',
   },
   scroll: {
     padding: 16,

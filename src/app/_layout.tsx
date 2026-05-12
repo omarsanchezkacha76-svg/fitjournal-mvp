@@ -1,11 +1,9 @@
 import React from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useColorScheme } from 'react-native';
 import { useAuth } from '@/hooks/useAuth';
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme() ?? 'light';
   useAuth(); // Initialize auth listener
 
   return (
@@ -14,7 +12,7 @@ export default function RootLayout() {
         screenOptions={{
           headerShown: false,
           contentStyle: {
-            backgroundColor: colorScheme === 'dark' ? '#0F172A' : '#F8FAFC',
+            backgroundColor: '#0A0F1E',
           },
         }}
       >
@@ -22,7 +20,7 @@ export default function RootLayout() {
         <Stack.Screen name="(auth)" />
         <Stack.Screen name="+not-found" />
       </Stack>
-      <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
+      <StatusBar style="light" />
     </>
   );
 }

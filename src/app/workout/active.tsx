@@ -8,7 +8,7 @@ import { useWorkoutTimer } from '@/hooks/useWorkoutTimer';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useAppStore } from '@/store/useAppStore';
 import { PREDEFINED_EXERCISES } from '@/data/exercises';
-import type { WorkoutSet, WorkoutExercise } from '@/types';
+import type { WorkoutSet } from '@/types';
 
 export default function ActiveWorkoutScreen() {
   const router = useRouter();
@@ -20,7 +20,6 @@ export default function ActiveWorkoutScreen() {
   const [completedExercises, setCompletedExercises] = useState<Record<string, WorkoutSet[]>>({});
   const [workoutName, setWorkoutName] = useState('Entrenamiento');
 
-  // Demo: load a routine based on ID. For MVP, using hardcoded PPL-Push
   const routineExercises = [
     { exercise: PREDEFINED_EXERCISES.find(e => e.id === 'bench-press')!, sets: 4, rest: 120 },
     { exercise: PREDEFINED_EXERCISES.find(e => e.id === 'incline-bench')!, sets: 3, rest: 90 },
@@ -58,9 +57,9 @@ export default function ActiveWorkoutScreen() {
       {/* Header */}
       <View style={styles.header}>
         <View>
-          <ThemedText variant="subtitle">{workoutName}</ThemedText>
+          <ThemedText variant="h3">{workoutName}</ThemedText>
           <ThemedText variant="caption" color={theme.textSecondary}>
-            {formatTime(elapsed)} • {completedCount}/{totalExercises} ejercicios
+            {formatTime(elapsed)} · {completedCount}/{totalExercises} ejercicios
           </ThemedText>
         </View>
         <Button
@@ -72,7 +71,7 @@ export default function ActiveWorkoutScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {routineExercises.map((item, index) => (
+        {routineExercises.map((item) => (
           <ExerciseCard
             key={item.exercise.id}
             exercise={item.exercise}

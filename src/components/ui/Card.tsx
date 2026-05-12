@@ -6,7 +6,7 @@ interface CardProps extends ViewProps {
   padding?: number;
 }
 
-export function Card({ children, style, padding = 20, ...rest }: CardProps) {
+export function Card({ children, style, padding = 24, ...rest }: CardProps) {
   const theme = useThemeColor();
 
   return (
@@ -33,8 +33,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderWidth: 1,
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 24,
+    shadowOpacity: 0.3,
+    shadowRadius: 32,
     elevation: 8,
   },
 });

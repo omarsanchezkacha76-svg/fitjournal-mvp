@@ -1,12 +1,10 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { useColorScheme } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme() ?? 'light';
-  const theme = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
+  const theme = Colors.dark;
 
   return (
     <Tabs

@@ -1,63 +1,44 @@
-const tintColorLight = '#6366F1';
-const tintColorDark = '#818CF8';
-
 export const Colors = {
-  light: {
-    text: '#0F172A',
-    textSecondary: '#475569',
-    textTertiary: '#94A3B8',
-    background: '#F1F5F9',
-    surface: '#FFFFFF',
-    surfaceSecondary: '#F8FAFC',
-    surfaceElevated: '#FFFFFF',
-    tint: tintColorLight,
-    tabIconDefault: '#94A3B8',
-    tabIconSelected: tintColorLight,
-    primary: '#6366F1',
-    primaryLight: '#EEF2FF',
-    primaryDark: '#4F46E5',
-    secondary: '#8B5CF6',
-    accent: '#F59E0B',
-    success: '#10B981',
-    successLight: '#ECFDF5',
-    error: '#EF4444',
-    errorLight: '#FEF2F2',
-    warning: '#F59E0B',
-    border: '#E2E8F0',
-    borderStrong: '#CBD5E1',
-    shadow: 'rgba(15, 23, 42, 0.08)',
-    gradientStart: '#6366F1',
-    gradientEnd: '#8B5CF6',
-    overlay: 'rgba(15, 23, 42, 0.4)',
-  },
   dark: {
     text: '#F8FAFC',
     textSecondary: '#94A3B8',
-    textTertiary: '#64748B',
-    background: '#0B1120',
-    surface: '#151E32',
-    surfaceSecondary: '#1E293B',
-    surfaceElevated: '#1E293B',
-    tint: tintColorDark,
-    tabIconDefault: '#475569',
-    tabIconSelected: tintColorDark,
-    primary: '#818CF8',
-    primaryLight: '#312E81',
-    primaryDark: '#6366F1',
-    secondary: '#A78BFA',
-    accent: '#FBBF24',
-    success: '#34D399',
-    successLight: '#064E3B',
-    error: '#F87171',
-    errorLight: '#7F1D1D',
-    warning: '#FBBF24',
-    border: '#1E293B',
-    borderStrong: '#334155',
-    shadow: 'rgba(0, 0, 0, 0.3)',
-    gradientStart: '#6366F1',
-    gradientEnd: '#8B5CF6',
-    overlay: 'rgba(0, 0, 0, 0.6)',
-  },
-};
+    textTertiary: '#475569',
+    textDisabled: '#2D3A5C',
 
-export type ThemeColors = typeof Colors.light;
+    background: '#0A0F1E',
+    surface: '#141B2D',
+    surfaceHover: '#1A2340',
+    surfaceActive: '#1F2A4A',
+
+    border: '#1E2A4A',
+    borderStrong: '#2D3A5C',
+
+    primary: '#6366F1',
+    primaryGlow: '#4F46E5',
+    primaryDim: 'rgba(99,102,241,0.15)',
+
+    accent: '#06B6D4',
+    accentGlow: '#0891B2',
+    accentDim: 'rgba(6,182,212,0.15)',
+
+    success: '#22C55E',
+    successDim: 'rgba(34,197,94,0.12)',
+    successBg: '#14532D',
+
+    error: '#EF4444',
+    errorDim: 'rgba(239,68,68,0.12)',
+    errorBg: '#7F1D1D',
+
+    warning: '#EAB308',
+    warningDim: 'rgba(234,179,8,0.12)',
+    warningBg: '#713F12',
+
+    tabIconDefault: '#475569',
+    tabIconSelected: '#6366F1',
+
+    shadow: 'rgba(0,0,0,0.3)',
+    innerHighlight: 'rgba(255,255,255,0.05)',
+  },
+} as const;
+
+export type ThemeColors = typeof Colors.dark;

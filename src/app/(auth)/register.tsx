@@ -23,7 +23,7 @@ export default function RegisterScreen() {
       return;
     }
     if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
+      setError('La contrasena debe tener al menos 6 caracteres');
       return;
     }
     setLoading(true);
@@ -44,7 +44,7 @@ export default function RegisterScreen() {
     >
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
-          <ThemedText variant="title" style={{ textAlign: 'center' }}>
+          <ThemedText variant="h1" style={{ textAlign: 'center' }}>
             Crear cuenta
           </ThemedText>
           <ThemedText variant="bodySecondary" style={{ textAlign: 'center', marginTop: 8 }}>
@@ -71,7 +71,7 @@ export default function RegisterScreen() {
             style={{ marginTop: 12 }}
           />
           <Input
-            placeholder="Contraseña"
+            placeholder="Contrasena"
             secureTextEntry
             value={password}
             onChangeText={setPassword}
@@ -90,8 +90,8 @@ export default function RegisterScreen() {
             style={{ marginTop: 24, alignSelf: 'center' }}
           >
             <ThemedText variant="bodySecondary">
-              ¿Ya tienes cuenta?{' '}
-              <Text style={{ color: theme.primary, fontWeight: '600' }}>Inicia sesión</Text>
+              Ya tienes cuenta?{' '}
+              <Text style={{ color: theme.primary, fontWeight: '600' }}>Inicia sesion</Text>
             </ThemedText>
           </TouchableOpacity>
         </View>
