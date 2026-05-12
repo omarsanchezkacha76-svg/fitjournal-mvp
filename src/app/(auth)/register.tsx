@@ -82,7 +82,7 @@ export default function RegisterScreen() {
             title={loading ? 'Creando cuenta...' : 'Registrarse'}
             onPress={handleRegister}
             disabled={loading}
-            style={{ marginTop: 24 }}
+            style={{ marginTop: 24, width: '100%' }}
           />
 
           <TouchableOpacity

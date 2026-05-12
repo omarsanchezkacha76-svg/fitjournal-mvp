@@ -2,7 +2,6 @@ import React from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -19,21 +18,16 @@ export default function ProfileScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <LinearGradient
-        colors={[theme.surface, theme.background]}
-        style={styles.header}
-      >
+      <View style={[styles.header, { backgroundColor: theme.primary }]}>
         <View style={styles.userRow}>
-          <View style={[styles.avatar, { backgroundColor: 'rgba(99,102,241,0.2)' }]}>
-            <ThemedText variant="h2" color={theme.primary}>
-              {user?.display_name?.charAt(0) || user?.email?.charAt(0) || '?'}
-            </ThemedText>
+          <View style={[styles.avatar, { backgroundColor: 'rgba(255,255,255,0.15)' }]}>
+            <FontAwesome6 name="user" size={24} color="#FFFFFF" />
           </View>
           <View style={{ marginLeft: 16, flex: 1 }}>
-            <ThemedText variant="h3" color={theme.text}>
+            <ThemedText variant="h3" color="#FFFFFF">
               {user?.display_name || 'Usuario'}
             </ThemedText>
-            <ThemedText variant="caption" color={theme.textSecondary}>
+            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">
               {user?.email || 'Invitado'}
             </ThemedText>
           </View>
@@ -45,7 +39,7 @@ export default function ProfileScreen() {
             />
           )}
         </View>
-      </LinearGradient>
+      </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Subscription */}
@@ -53,7 +47,7 @@ export default function ProfileScreen() {
           <View style={styles.subscriptionRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
-                <FontAwesome6 name="gem" size={18} color={theme.primary} />
+                <FontAwesome6 name="heart" size={16} color={theme.primary} />
               </View>
               <View style={{ marginLeft: 14 }}>
                 <ThemedText variant="h3">
@@ -67,7 +61,7 @@ export default function ProfileScreen() {
               </View>
             </View>
             {user?.subscription_tier !== 'pro' && (
-              <Button title="Upgrade" size="small" />
+              <Button title="UPGRADE" size="small" />
             )}
           </View>
         </Card>
@@ -87,7 +81,7 @@ export default function ProfileScreen() {
               value={true}
               onValueChange={() => {}}
               trackColor={{ false: theme.borderStrong, true: theme.primary }}
-              thumbColor={theme.text}
+              thumbColor="#FFFFFF"
             />
           </View>
 
@@ -99,10 +93,10 @@ export default function ProfileScreen() {
               <ThemedText variant="body">Notificaciones</ThemedText>
             </View>
             <Switch
-              value={true}
+              value={false}
               onValueChange={() => {}}
               trackColor={{ false: theme.borderStrong, true: theme.primary }}
-              thumbColor={theme.text}
+              thumbColor="#FFFFFF"
             />
           </View>
 
@@ -117,7 +111,7 @@ export default function ProfileScreen() {
               value={true}
               onValueChange={() => {}}
               trackColor={{ false: theme.borderStrong, true: theme.primary }}
-              thumbColor={theme.text}
+              thumbColor="#FFFFFF"
             />
           </View>
         </Card>
@@ -128,22 +122,25 @@ export default function ProfileScreen() {
             ACERCA DE
           </ThemedText>
           <TouchableOpacity style={styles.menuItem}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <FontAwesome6 name="shield-halved" size={16} color={theme.textSecondary} style={{ marginRight: 12 }} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+              <FontAwesome6 name="lock" size={16} color={theme.textSecondary} style={{ marginRight: 12 }} />
               <ThemedText variant="body">Politica de privacidad</ThemedText>
             </View>
+            <FontAwesome6 name="chevron-right" size={12} color={theme.textTertiary} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
               <FontAwesome6 name="file-lines" size={16} color={theme.textSecondary} style={{ marginRight: 12 }} />
               <ThemedText variant="body">Terminos de uso</ThemedText>
             </View>
+            <FontAwesome6 name="chevron-right" size={12} color={theme.textTertiary} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
               <FontAwesome6 name="circle-info" size={16} color={theme.textSecondary} style={{ marginRight: 12 }} />
               <ThemedText variant="body">Version 1.0.0</ThemedText>
             </View>
+            <ThemedText variant="caption" color={theme.textTertiary}>1.0.0</ThemedText>
           </TouchableOpacity>
         </Card>
 
@@ -168,17 +165,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 60,
     paddingBottom: 32,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   userRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 22,
+    width: 56,
+    height: 56,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -205,6 +202,9 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 16,
   },
 });

@@ -73,7 +73,7 @@ export default function LoginScreen() {
             title={loading ? 'Entrando...' : 'Iniciar sesion'}
             onPress={handleLogin}
             disabled={loading}
-            style={{ marginTop: 28 }}
+            style={{ marginTop: 28, width: '100%' }}
           />
 
           <TouchableOpacity

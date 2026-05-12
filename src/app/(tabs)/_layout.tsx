@@ -11,10 +11,19 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.primary,
-        tabBarInactiveTintColor: theme.tabIconDefault,
+        tabBarInactiveTintColor: theme.textTertiary,
         tabBarStyle: {
-          backgroundColor: theme.surface,
-          borderTopColor: theme.border,
+          backgroundColor: theme.background,
+          borderTopWidth: 0,
+          height: 70,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 10,
+          fontWeight: '600',
+          textTransform: 'uppercase',
+          letterSpacing: 0.5,
         },
       }}
     >
@@ -23,7 +32,7 @@ export default function TabLayout() {
         options={{
           title: 'Hoy',
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome6 name="book-open" size={size} color={color} />
+            <FontAwesome6 name="calendar-check" size={size} color={color} />
           ),
         }}
       />

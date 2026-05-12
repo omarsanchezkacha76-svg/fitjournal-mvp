@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { MacroBar } from '@/components/ui/MacroBar';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useAppStore } from '@/store/useAppStore';
 import { formatDate, getTodayIso } from '@/lib/utils';
@@ -36,7 +34,6 @@ export default function TodayScreen() {
   const totalCalories = journal.foods.reduce((sum, f) => sum + (f.calories || 0), 0);
   const totalProtein = journal.foods.reduce((sum, f) => sum + (f.protein || 0), 0);
   const totalCarbs = journal.foods.reduce((sum, f) => sum + (f.carbs || 0), 0);
-  const totalFat = journal.foods.reduce((sum, f) => sum + (f.fat || 0), 0);
 
   const foodsByMeal = {
     breakfast: journal.foods.filter(f => f.meal_type === 'breakfast'),
@@ -46,49 +43,57 @@ export default function TodayScreen() {
   };
 
   const mealLabels: Record<string, string> = {
-    breakfast: 'Desayuno',
-    lunch: 'Comida',
-    dinner: 'Cena',
-    snack: 'Snack',
+    breakfast: 'DESAYUNO',
+    lunch: 'COMIDA',
+    dinner: 'CENA',
+    snack: 'SNACK',
+  };
+
+  const mealIcons: Record<string, string> = {
+    breakfast: 'mug-hot',
+    lunch: 'utensils',
+    dinner: 'moon',
+    snack: 'cookie-bite',
   };
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      {/* Gradient Header */}
-      <LinearGradient
-        colors={[theme.surface, theme.background]}
-        style={styles.headerGradient}
-      >
-        <View style={styles.header}>
+      {/* Indigo Header */}
+      <View style={[styles.header, { backgroundColor: theme.primary }]}>
+        <View style={styles.headerNav}>
           <TouchableOpacity onPress={() => changeDay(-1)} style={styles.arrow}>
-            <FontAwesome6 name="chevron-left" size={18} color={theme.textSecondary} />
+            <FontAwesome6 name="chevron-left" size={16} color="rgba(255,255,255,0.8)" />
           </TouchableOpacity>
           <View style={{ alignItems: 'center' }}>
-            <ThemedText variant="h2">
+            <ThemedText variant="h2" color="#FFFFFF">
               {isToday ? 'Hoy' : formatDate(selectedDate)}
             </ThemedText>
-            {isToday && (
-              <ThemedText variant="caption" color={theme.textSecondary}>
-                {formatDate(selectedDate)}
-              </ThemedText>
-            )}
+            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">
+              {formatDate(selectedDate)}
+            </ThemedText>
           </View>
           <TouchableOpacity onPress={() => changeDay(1)} style={styles.arrow}>
-            <FontAwesome6 name="chevron-right" size={18} color={theme.textSecondary} />
+            <FontAwesome6 name="chevron-right" size={16} color="rgba(255,255,255,0.8)" />
           </TouchableOpacity>
         </View>
 
-        {/* Summary Stats Row */}
         <View style={styles.statsRow}>
-          <MacroBar label="Kcal" value={totalCalories} max={2500} color={theme.primary} unit="" />
-          <View style={{ width: 16 }} />
-          <MacroBar label="Proteina" value={Math.round(totalProtein)} max={180} color={theme.accent} />
-          <View style={{ width: 16 }} />
-          <MacroBar label="Carbs" value={Math.round(totalCarbs)} max={300} color={theme.success} />
-          <View style={{ width: 16 }} />
-          <MacroBar label="Grasas" value={Math.round(totalFat)} max={80} color={theme.warning} />
+          <View style={styles.statItem}>
+            <ThemedText variant="statSmall" color="#FFFFFF">{totalCalories}</ThemedText>
+            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">kcal</ThemedText>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <ThemedText variant="statSmall" color="#FFFFFF">{Math.round(totalProtein)}g</ThemedText>
+            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">proteina</ThemedText>
+          </View>
+          <View style={styles.statDivider} />
+          <View style={styles.statItem}>
+            <ThemedText variant="statSmall" color="#FFFFFF">{Math.round(totalCarbs)}g</ThemedText>
+            <ThemedText variant="caption" color="rgba(255,255,255,0.8)">carbs</ThemedText>
+          </View>
         </View>
-      </LinearGradient>
+      </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Workout Card */}
@@ -96,7 +101,7 @@ export default function TodayScreen() {
           <View style={styles.cardHeader}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
-                <FontAwesome6 name="dumbbell" size={18} color={theme.primary} />
+                <FontAwesome6 name="hashtag" size={16} color={theme.primary} />
               </View>
               <View style={{ marginLeft: 12 }}>
                 <ThemedText variant="h3">Entrenamiento</ThemedText>
@@ -105,29 +110,25 @@ export default function TodayScreen() {
                 </ThemedText>
               </View>
             </View>
-            {journal.workout ? (
-              <View style={[styles.badge, { backgroundColor: theme.successDim }]}>
-                <ThemedText variant="caption" color={theme.success}>Done</ThemedText>
-              </View>
-            ) : null}
           </View>
 
           {journal.workout ? (
-            <View style={{ marginTop: 16 }}>
+            <View style={{ marginTop: 12 }}>
               <ThemedText variant="body">{journal.workout.name}</ThemedText>
               <ThemedText variant="bodySecondary" style={{ marginTop: 4 }}>
                 {journal.workout.exercises?.length || 0} ejercicios · {Math.floor((journal.workout.duration_seconds || 0) / 60)} min
               </ThemedText>
             </View>
           ) : (
-            <View style={{ marginTop: 16, alignItems: 'flex-start' }}>
-              <ThemedText variant="bodySecondary" style={{ marginBottom: 16 }}>
+            <View style={{ marginTop: 12 }}>
+              <ThemedText variant="bodySecondary" style={{ marginBottom: 12 }}>
                 No hay entrenamiento registrado hoy
               </ThemedText>
               <Button
                 title="Empezar rutina"
-                size="small"
+                size="medium"
                 onPress={() => router.push('/(tabs)/routines')}
+                style={{ width: '100%' }}
               />
             </View>
           )}
@@ -138,7 +139,7 @@ export default function TodayScreen() {
           <View style={styles.cardHeader}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={[styles.iconCircle, { backgroundColor: theme.successDim }]}>
-                <FontAwesome6 name="utensils" size={16} color={theme.success} />
+                <FontAwesome6 name="utensils" size={14} color={theme.success} />
               </View>
               <View style={{ marginLeft: 12 }}>
                 <ThemedText variant="h3">Nutricion</ThemedText>
@@ -147,33 +148,32 @@ export default function TodayScreen() {
                 </ThemedText>
               </View>
             </View>
-            <Button
-              title="+"
-              variant="ghost"
-              size="small"
-              onPress={() => router.push('/diet/add')}
-              style={{ minWidth: 44, paddingHorizontal: 0 }}
-            />
           </View>
 
           {Object.entries(foodsByMeal).map(([meal, foods]) => (
-            <View key={meal} style={{ marginTop: 14 }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
+            <View key={meal} style={styles.mealRow}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+                <FontAwesome6
+                  name={mealIcons[meal]}
+                  size={12}
+                  color={theme.textTertiary}
+                  style={{ marginRight: 10, width: 16 }}
+                />
                 <ThemedText variant="caption" color={theme.textTertiary}>
-                  {mealLabels[meal].toUpperCase()}
+                  {mealLabels[meal]}
                 </ThemedText>
               </View>
               {foods.length === 0 ? (
-                <ThemedText variant="bodySecondary" style={{ opacity: 0.5 }}>
-                  —
-                </ThemedText>
+                <TouchableOpacity
+                  onPress={() => router.push('/diet/add')}
+                  style={styles.addButton}
+                >
+                  <FontAwesome6 name="plus" size={12} color={theme.textTertiary} />
+                </TouchableOpacity>
               ) : (
-                foods.map((food, i) => (
-                  <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 5 }}>
-                    <ThemedText variant="body" style={{ fontSize: 15 }}>{food.name} ({food.amount_grams}g)</ThemedText>
-                    <ThemedText variant="body" color={theme.textSecondary} style={{ fontSize: 15 }}>{food.calories} kcal</ThemedText>
-                  </View>
-                ))
+                <ThemedText variant="caption" color={theme.textSecondary}>
+                  {foods.reduce((s, f) => s + f.calories, 0)} kcal
+                </ThemedText>
               )}
             </View>
           ))}
@@ -183,7 +183,7 @@ export default function TodayScreen() {
         <Card>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
             <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
-              <FontAwesome6 name="pen-to-square" size={16} color={theme.primary} />
+              <FontAwesome6 name="note-sticky" size={14} color={theme.primary} />
             </View>
             <ThemedText variant="h3" style={{ marginLeft: 12 }}>Notas del dia</ThemedText>
           </View>
@@ -217,14 +217,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  headerGradient: {
+  header: {
     paddingHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 40,
-    borderBottomLeftRadius: 28,
-    borderBottomRightRadius: 28,
+    paddingBottom: 32,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
-  header: {
+  headerNav: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -238,7 +238,16 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+  },
+  statItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statDivider: {
+    width: 1,
+    height: 36,
+    backgroundColor: 'rgba(255,255,255,0.2)',
   },
   scroll: {
     padding: 16,
@@ -250,20 +259,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconCircle: {
-    width: 44,
-    height: 44,
-    borderRadius: 14,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  badge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
+  mealRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(30,42,74,0.5)',
+  },
+  addButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    backgroundColor: '#1A2340',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   notesInput: {
     marginTop: 8,
-    minHeight: 90,
+    minHeight: 80,
     borderRadius: 14,
     borderWidth: 1,
     padding: 14,

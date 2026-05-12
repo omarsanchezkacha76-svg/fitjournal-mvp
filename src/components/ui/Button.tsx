@@ -33,18 +33,18 @@ export function Button({ title, variant = 'primary', size = 'medium', style, dis
   };
 
   const paddingSizes: Record<Size, { py: number; px: number; fontSize: number }> = {
-    small: { py: 10, px: 18, fontSize: 12 },
-    medium: { py: 16, px: 28, fontSize: 14 },
-    large: { py: 20, px: 36, fontSize: 14 },
+    small: { py: 8, px: 16, fontSize: 11 },
+    medium: { py: 14, px: 24, fontSize: 13 },
+    large: { py: 18, px: 32, fontSize: 13 },
   };
 
   const s = paddingSizes[size];
 
   const glowStyle =
     variant === 'primary'
-      ? { shadowColor: theme.primary, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.25, shadowRadius: 20, elevation: 4 }
+      ? { shadowColor: theme.primary, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.25, shadowRadius: 16, elevation: 3 }
       : variant === 'accent'
-      ? { shadowColor: theme.accent, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.25, shadowRadius: 20, elevation: 4 }
+      ? { shadowColor: theme.accent, shadowOffset: { width: 0, height: 0 }, shadowOpacity: 0.25, shadowRadius: 16, elevation: 3 }
       : {};
 
   return (
@@ -86,10 +86,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'flex-start',
   },
   text: {
     fontWeight: '700',
-    letterSpacing: 0.7,
+    letterSpacing: 0.6,
     textTransform: 'uppercase',
   },
 });

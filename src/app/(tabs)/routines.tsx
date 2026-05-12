@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useAppStore } from '@/store/useAppStore';
 import type { Routine } from '@/types';
@@ -40,45 +38,9 @@ const PREDEFINED_ROUTINES: Routine[] = [
     exercises: [],
   },
   {
-    id: 'upper-lower-upper',
-    name: 'Upper Body',
-    description: 'Tren superior completo',
-    category: 'strength',
-    difficulty: 'beginner',
-    is_predefined: true,
-    exercises: [],
-  },
-  {
-    id: 'upper-lower-lower',
-    name: 'Lower Body',
-    description: 'Tren inferior completo',
-    category: 'strength',
-    difficulty: 'beginner',
-    is_predefined: true,
-    exercises: [],
-  },
-  {
-    id: 'calisthenics-basics',
-    name: 'Calistenia Basica',
-    description: 'Push-ups, pull-ups, squats, core',
-    category: 'calisthenics',
-    difficulty: 'beginner',
-    is_predefined: true,
-    exercises: [],
-  },
-  {
-    id: 'calisthenics-skills',
-    name: 'Calistenia Skills',
-    description: 'Progresiones hacia planche, front lever',
-    category: 'calisthenics',
-    difficulty: 'advanced',
-    is_predefined: true,
-    exercises: [],
-  },
-  {
-    id: 'full-body-3x',
-    name: 'Full Body 3x',
-    description: 'Cuerpo completo 3 veces por semana',
+    id: 'full-body-a',
+    name: 'Full Body A',
+    description: 'Cuerpo completo basico',
     category: 'strength',
     difficulty: 'beginner',
     is_predefined: true,
@@ -97,44 +59,38 @@ export default function RoutinesScreen() {
     ? allRoutines.filter(r => r.is_predefined)
     : allRoutines.filter(r => !r.is_predefined);
 
-  function getDifficultyColor(difficulty: string): 'success' | 'warning' | 'error' {
+  function getDifficultyColor(difficulty: string) {
     switch (difficulty) {
-      case 'beginner': return 'success';
-      case 'intermediate': return 'warning';
-      case 'advanced': return 'error';
-      default: return 'success';
+      case 'beginner': return theme.success;
+      case 'intermediate': return theme.warning;
+      case 'advanced': return theme.error;
+      default: return theme.textSecondary;
     }
   }
 
   function getDifficultyLabel(difficulty: string) {
     switch (difficulty) {
-      case 'beginner': return 'Principiante';
-      case 'intermediate': return 'Intermedio';
-      case 'advanced': return 'Avanzado';
-      default: return difficulty;
+      case 'beginner': return 'PRINCIPIANTE';
+      case 'intermediate': return 'INTERMEDIO';
+      case 'advanced': return 'AVANZADO';
+      default: return difficulty.toUpperCase();
     }
   }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <LinearGradient
-        colors={[theme.surface, theme.background]}
-        style={styles.header}
-      >
-        <ThemedText variant="h1">Rutinas</ThemedText>
-        <ThemedText variant="caption" color={theme.textSecondary}>
-          {filtered.length} rutinas disponibles
+      <View style={[styles.header, { backgroundColor: theme.primary }]}>
+        <ThemedText variant="h1" color="#FFFFFF">Rutinas</ThemedText>
+        <ThemedText variant="caption" color="rgba(255,255,255,0.8)">
+          8 rutinas disponibles
         </ThemedText>
-      </LinearGradient>
+      </View>
 
       {/* Tabs */}
       <View style={styles.tabs}>
         <TouchableOpacity
           onPress={() => setActiveTab('predefined')}
-          style={[
-            styles.tab,
-            activeTab === 'predefined' && { borderBottomColor: theme.primary, borderBottomWidth: 2 },
-          ]}
+          style={[styles.tab, activeTab === 'predefined' && styles.tabActive]}
         >
           <ThemedText
             variant="body"
@@ -145,10 +101,7 @@ export default function RoutinesScreen() {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setActiveTab('custom')}
-          style={[
-            styles.tab,
-            activeTab === 'custom' && { borderBottomColor: theme.primary, borderBottomWidth: 2 },
-          ]}
+          style={[styles.tab, activeTab === 'custom' && styles.tabActive]}
         >
           <ThemedText
             variant="body"
@@ -165,33 +118,40 @@ export default function RoutinesScreen() {
         contentContainerStyle={styles.list}
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <TouchableOpacity activeOpacity={0.9}>
-            <Card style={{ marginBottom: 14 }}>
-              <View style={styles.routineHeader}>
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                  <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
-                    <FontAwesome6
-                      name={item.category === 'calisthenics' ? 'person-running' : 'dumbbell'}
-                      size={18}
-                      color={theme.primary}
-                    />
-                  </View>
-                  <View style={{ marginLeft: 14, flex: 1 }}>
-                    <ThemedText variant="h3">{item.name}</ThemedText>
-                    <ThemedText variant="bodySecondary" style={{ marginTop: 2 }}>
-                      {item.description}
+          <Card style={{ marginBottom: 12 }}>
+            <View style={styles.routineHeader}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
+                  <FontAwesome6 name="hashtag" size={16} color={theme.primary} />
+                </View>
+                <View style={{ marginLeft: 14, flex: 1 }}>
+                  <ThemedText variant="h3">{item.name}</ThemedText>
+                  <ThemedText variant="bodySecondary" style={{ marginTop: 2 }}>
+                    {item.description}
+                  </ThemedText>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 8, gap: 8 }}>
+                    <ThemedText
+                      variant="caption"
+                      color={getDifficultyColor(item.difficulty)}
+                      style={{ fontWeight: '700' }}
+                    >
+                      {getDifficultyLabel(item.difficulty)}
+                    </ThemedText>
+                    <ThemedText variant="caption" color={theme.textTertiary}>
+                      · {item.exercises?.length || 6} ejercicios
                     </ThemedText>
                   </View>
                 </View>
               </View>
-              <View style={styles.routineFooter}>
-                <Badge color={getDifficultyColor(item.difficulty)}>
-                  {getDifficultyLabel(item.difficulty)}
-                </Badge>
-                <Button title="Empezar" size="small" onPress={() => router.push({ pathname: '/workout/active', params: { routineId: item.id } })} />
-              </View>
-            </Card>
-          </TouchableOpacity>
+            </View>
+            <View style={{ alignItems: 'flex-end', marginTop: 8 }}>
+              <Button
+                title="Empezar"
+                size="small"
+                onPress={() => router.push({ pathname: '/workout/active', params: { routineId: item.id } })}
+              />
+            </View>
+          </Card>
         )}
         ListEmptyComponent={
           <View style={{ alignItems: 'center', marginTop: 40 }}>
@@ -212,8 +172,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 60,
     paddingBottom: 24,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   tabs: {
     flexDirection: 'row',
@@ -225,6 +185,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     alignItems: 'center',
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  tabActive: {
+    borderBottomColor: '#6366F1',
   },
   list: {
     padding: 16,
@@ -236,16 +201,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconCircle: {
-    width: 48,
-    height: 48,
+    width: 44,
+    height: 44,
     borderRadius: 14,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  routineFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 16,
   },
 });

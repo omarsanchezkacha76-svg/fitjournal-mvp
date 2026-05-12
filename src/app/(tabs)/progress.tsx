@@ -1,25 +1,24 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { FontAwesome6 } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Card } from '@/components/ui/Card';
 import { useThemeColor } from '@/hooks/useThemeColor';
 
 const VOLUME_DATA = [
-  { week: 'S1', volume: 12000 },
-  { week: 'S2', volume: 13500 },
-  { week: 'S3', volume: 12800 },
-  { week: 'S4', volume: 15200 },
-  { week: 'S5', volume: 16000 },
-  { week: 'S6', volume: 17500 },
+  { week: '31 mar', volume: 12000 },
+  { week: '7 abr', volume: 13500 },
+  { week: '14 abr', volume: 12800 },
+  { week: '21 abr', volume: 15200 },
+  { week: '28 abr', volume: 16000 },
+  { week: '5 may', volume: 17500 },
 ];
 
 const LIFT_PROGRESS = [
-  { exercise: 'Press banca', start: 60, current: 82.5 },
-  { exercise: 'Sentadilla', start: 80, current: 110 },
-  { exercise: 'Peso muerto', start: 100, current: 140 },
-  { exercise: 'Dominadas', start: 0, current: 12 },
+  { exercise: 'Press de banca', current: 80, target: 100, color: '#6366F1' },
+  { exercise: 'Sentadilla', current: 100, target: 140, color: '#06B6D4' },
+  { exercise: 'Peso muerto', current: 120, target: 180, color: '#EAB308' },
+  { exercise: 'Press militar', current: 55, target: 80, color: '#22C55E' },
 ];
 
 export default function ProgressScreen() {
@@ -28,26 +27,46 @@ export default function ProgressScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
-      <LinearGradient
-        colors={[theme.surface, theme.background]}
-        style={styles.header}
-      >
-        <ThemedText variant="h1">Progreso</ThemedText>
-        <ThemedText variant="caption" color={theme.textSecondary}>Ultimas 6 semanas</ThemedText>
-      </LinearGradient>
+      <View style={[styles.header, { backgroundColor: theme.primary }]}>
+        <ThemedText variant="h1" color="#FFFFFF">Progreso</ThemedText>
+        <ThemedText variant="caption" color="rgba(255,255,255,0.8)">Resumen general</ThemedText>
+      </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Volume Chart Card */}
+        {/* Stats Grid */}
         <Card style={{ marginBottom: 16, marginTop: -20 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            <View style={[styles.iconCircle, { backgroundColor: theme.primaryDim }]}>
-              <FontAwesome6 name="chart-column" size={16} color={theme.primary} />
+          <View style={styles.statsGrid}>
+            <View style={styles.statItem}>
+              <ThemedText variant="statSmall" color={theme.accent}>47</ThemedText>
+              <ThemedText variant="label" color={theme.textTertiary}>ENTRENAMIENTOS</ThemedText>
             </View>
-            <ThemedText variant="h3" style={{ marginLeft: 12 }}>Volumen semanal</ThemedText>
+            <View style={styles.statItem}>
+              <ThemedText variant="statSmall" color={theme.warning}>12</ThemedText>
+              <ThemedText variant="label" color={theme.textTertiary}>RACHA DE DIAS</ThemedText>
+            </View>
+          </View>
+          <View style={styles.statsGrid}>
+            <View style={styles.statItem}>
+              <ThemedText variant="statSmall" color="#FFFFFF">1.284</ThemedText>
+              <ThemedText variant="label" color={theme.textTertiary}>SERIES TOTALES</ThemedText>
+            </View>
+            <View style={styles.statItem}>
+              <ThemedText variant="statSmall" color="#FFFFFF">61h</ThemedText>
+              <ThemedText variant="label" color={theme.textTertiary}>TIEMPO TOTAL</ThemedText>
+            </View>
+          </View>
+        </Card>
+
+        {/* Volume Chart Card */}
+        <Card style={{ marginBottom: 16 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <ThemedText variant="h3">Volumen semanal</ThemedText>
+            <ThemedText variant="caption" color={theme.textTertiary}>6 SEMANAS</ThemedText>
           </View>
           <View style={styles.chartContainer}>
             {VOLUME_DATA.map((item, index) => {
-              const height = (item.volume / maxVolume) * 120;
+              const height = (item.volume / maxVolume) * 100;
+              const isLast = index === VOLUME_DATA.length - 1;
               return (
                 <View key={index} style={styles.barWrapper}>
                   <View
@@ -55,100 +74,56 @@ export default function ProgressScreen() {
                       styles.bar,
                       {
                         height,
-                        backgroundColor: theme.primary,
-                        opacity: 0.5 + (index / VOLUME_DATA.length) * 0.5,
+                        backgroundColor: isLast ? theme.primary : '#1E2A4A',
                       },
                     ]}
                   />
-                  <ThemedText variant="caption" color={theme.textTertiary} style={{ marginTop: 6 }}>
+                  <ThemedText variant="caption" color={theme.textTertiary} style={{ marginTop: 6, fontSize: 10 }}>
                     {item.week}
                   </ThemedText>
                 </View>
               );
             })}
           </View>
-          <View style={styles.volumeStats}>
-            <View>
-              <ThemedText variant="caption" color={theme.textSecondary}>Total</ThemedText>
-              <ThemedText variant="h3">87,000 kg</ThemedText>
-            </View>
-            <View>
-              <ThemedText variant="caption" color={theme.textSecondary}>+vs ultima</ThemedText>
-              <ThemedText variant="h3" color={theme.success}>+9.4%</ThemedText>
-            </View>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 12 }}>
+            <FontAwesome6 name="arrow-trend-up" size={12} color={theme.success} style={{ marginRight: 6 }} />
+            <ThemedText variant="caption" color={theme.success}>+27% vs semana anterior</ThemedText>
           </View>
         </Card>
 
         {/* Lift Progress Card */}
         <Card style={{ marginBottom: 16 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
-            <View style={[styles.iconCircle, { backgroundColor: theme.successDim }]}>
-              <FontAwesome6 name="trophy" size={16} color={theme.success} />
-            </View>
-            <ThemedText variant="h3" style={{ marginLeft: 12 }}>Progreso en ejercicios</ThemedText>
-          </View>
-          <View style={{ gap: 20 }}>
+          <ThemedText variant="h3" style={{ marginBottom: 16 }}>Marcas personales</ThemedText>
+          <View style={{ gap: 16 }}>
             {LIFT_PROGRESS.map((lift, index) => {
-              const progress = lift.start === 0
-                ? 100
-                : ((lift.current - lift.start) / lift.start) * 100;
+              const pct = Math.min((lift.current / lift.target) * 100, 100);
               return (
                 <View key={index}>
                   <View style={styles.liftHeader}>
                     <ThemedText variant="body">{lift.exercise}</ThemedText>
-                    <ThemedText variant="caption" color={theme.success}>+{progress.toFixed(0)}%</ThemedText>
+                    <View style={{ flexDirection: 'row', alignItems: 'baseline' }}>
+                      <ThemedText variant="body" color={lift.color} style={{ fontWeight: '700' }}>
+                        {lift.current}
+                      </ThemedText>
+                      <ThemedText variant="caption" color={theme.textTertiary}> / {lift.target} kg</ThemedText>
+                    </View>
                   </View>
                   <View style={[styles.progressBar, { backgroundColor: theme.border }]}>
                     <View
                       style={[
                         styles.progressFill,
                         {
-                          width: `${Math.min(progress, 100)}%`,
-                          backgroundColor: theme.primary,
+                          width: `${pct}%`,
+                          backgroundColor: lift.color,
                         },
                       ]}
                     />
-                  </View>
-                  <View style={styles.liftValues}>
-                    <ThemedText variant="caption" color={theme.textTertiary}>
-                      Inicio: {lift.start} {lift.start === 0 ? 'reps' : 'kg'}
-                    </ThemedText>
-                    <ThemedText variant="caption" color={theme.textSecondary}>
-                      Actual: {lift.current} {lift.start === 0 ? 'reps' : 'kg'}
-                    </ThemedText>
                   </View>
                 </View>
               );
             })}
           </View>
         </Card>
-
-        {/* Stats Grid */}
-        <View style={styles.statsGrid}>
-          <Card style={{ flex: 1 }}>
-            <FontAwesome6 name="dumbbell" size={20} color={theme.primary} />
-            <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Entrenamientos</ThemedText>
-            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>24</ThemedText>
-          </Card>
-          <Card style={{ flex: 1 }}>
-            <FontAwesome6 name="bolt" size={20} color={theme.warning} />
-            <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Racha actual</ThemedText>
-            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>5 dias</ThemedText>
-          </Card>
-        </View>
-
-        <View style={styles.statsGrid}>
-          <Card style={{ flex: 1 }}>
-            <FontAwesome6 name="layer-group" size={20} color={theme.accent} />
-            <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Sets totales</ThemedText>
-            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>312</ThemedText>
-          </Card>
-          <Card style={{ flex: 1 }}>
-            <FontAwesome6 name="clock" size={20} color={theme.textSecondary} />
-            <ThemedText variant="caption" color={theme.textSecondary} style={{ marginTop: 8 }}>Tiempo total</ThemedText>
-            <ThemedText variant="statSmall" style={{ marginTop: 4 }}>18h</ThemedText>
-          </Card>
-        </View>
 
         <View style={{ height: 40 }} />
       </ScrollView>
@@ -164,66 +139,49 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 60,
     paddingBottom: 32,
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    borderBottomLeftRadius: 32,
+    borderBottomRightRadius: 32,
   },
   scroll: {
     padding: 16,
     paddingTop: 0,
   },
-  iconCircle: {
-    width: 40,
-    height: 40,
-    borderRadius: 14,
-    alignItems: 'center',
-    justifyContent: 'center',
+  statsGrid: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 16,
+  },
+  statItem: {
+    flex: 1,
   },
   chartContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    height: 140,
-    paddingHorizontal: 8,
+    height: 110,
+    paddingHorizontal: 4,
   },
   barWrapper: {
     alignItems: 'center',
     flex: 1,
   },
   bar: {
-    width: 32,
-    borderRadius: 8,
-  },
-  volumeStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 24,
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#1E2A4A',
+    width: 28,
+    borderRadius: 6,
   },
   liftHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 8,
   },
   progressBar: {
-    height: 8,
-    borderRadius: 4,
-    marginTop: 10,
+    height: 6,
+    borderRadius: 3,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    borderRadius: 4,
-  },
-  liftValues: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 6,
-  },
-  statsGrid: {
-    flexDirection: 'row',
-    gap: 12,
-    marginBottom: 12,
+    borderRadius: 3,
   },
 });
