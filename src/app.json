@@ -24,7 +24,13 @@
       "package": "com.tuempresa.fitjournal"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Permite a FitJournal acceder a la camara para escanear comida y calcular macros."
+        }
+      ]
     ],
     "scheme": "fitjournal"
   }

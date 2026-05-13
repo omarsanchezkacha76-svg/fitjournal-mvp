@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome6 } from '@expo/vector-icons';
 import { ThemedText } from '@/components/ui/ThemedText';
 import { Button } from '@/components/ui/Button';
@@ -12,10 +12,33 @@ import type { FoodEntry } from '@/types';
 export default function AddFoodScreen() {
   const router = useRouter();
   const theme = useThemeColor();
+  const params = useLocalSearchParams();
   const { selectedDate, updateJournalCache, journalCache } = useAppStore();
+
+  const scanned = params.scanned === '1';
+  const scannedName = params.name as string;
+  const scannedCalories = parseFloat(params.calories as string) || 0;
+  const scannedProtein = parseFloat(params.protein as string) || 0;
+  const scannedCarbs = parseFloat(params.carbs as string) || 0;
+  const scannedFat = parseFloat(params.fat as string) || 0;
+  const scannedGrams = parseFloat(params.amount_grams as string) || 100;
+
   const [selectedFood, setSelectedFood] = useState<any>(null);
   const [grams, setGrams] = useState('100');
   const [mealType, setMealType] = useState<FoodEntry['meal_type']>('breakfast');
+
+  useEffect(() => {
+    if (scanned) {
+      setSelectedFood({
+        name: scannedName,
+        calories: scannedCalories,
+        protein: scannedProtein,
+        carbs: scannedCarbs,
+        fat: scannedFat,
+      });
+      setGrams(String(scannedGrams));
+    }
+  }, [scanned, scannedName, scannedCalories, scannedProtein, scannedCarbs, scannedFat, scannedGrams]);
 
   const mealOptions: { key: FoodEntry['meal_type']; label: string }[] = [
     { key: 'breakfast', label: 'Desayuno' },
@@ -31,10 +54,10 @@ export default function AddFoodScreen() {
     const newFood: FoodEntry = {
       id: `food-${Date.now()}`,
       name: selectedFood.name,
-      calories: Math.round(selectedFood.calories * ratio),
-      protein: Math.round(selectedFood.protein * ratio * 10) / 10,
-      carbs: Math.round(selectedFood.carbs * ratio * 10) / 10,
-      fat: Math.round(selectedFood.fat * ratio * 10) / 10,
+      calories: Math.round((selectedFood.calories || 0) * ratio),
+      protein: Math.round((selectedFood.protein || 0) * ratio * 10) / 10,
+      carbs: Math.round((selectedFood.carbs || 0) * ratio * 10) / 10,
+      fat: Math.round((selectedFood.fat || 0) * ratio * 10) / 10,
       amount_grams: g,
       meal_type: mealType,
       logged_at: new Date().toISOString(),
@@ -44,7 +67,8 @@ export default function AddFoodScreen() {
     router.back();
   }
 
-  if (!selectedFood) {
+  // Busqueda inicial
+  if (!selectedFood && !scanned) {
     return (
       <View style={[styles.container, { backgroundColor: theme.background }]}>
         <View style={styles.header}>
@@ -53,7 +77,27 @@ export default function AddFoodScreen() {
             <FontAwesome6 name="xmark" size={20} color={theme.textTertiary} />
           </TouchableOpacity>
         </View>
-        <FoodSearch onSelect={setSelectedFood} />
+
+        {/* Boton escanear */}
+        <TouchableOpacity
+          onPress={() => router.push('/diet/scan')}
+          style={[styles.scanButton, { backgroundColor: theme.surface, borderColor: theme.border }]}
+        >
+          <View style={[styles.scanIcon, { backgroundColor: theme.primaryDim }]}>
+            <FontAwesome6 name="camera" size={16} color={theme.primary} />
+          </View>
+          <View style={{ flex: 1, marginLeft: 12 }}>
+            <ThemedText variant="h3">Escanear comida</ThemedText>
+            <ThemedText variant="caption" color={theme.textTertiary}>
+              Fotografia tu plato y la IA calcula los macros
+            </ThemedText>
+          </View>
+          <FontAwesome6 name="chevron-right" size={14} color={theme.textTertiary} />
+        </TouchableOpacity>
+
+        <View style={{ marginTop: 8, flex: 1 }}>
+          <FoodSearch onSelect={setSelectedFood} />
+        </View>
       </View>
     );
   }
@@ -61,8 +105,8 @@ export default function AddFoodScreen() {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <View style={styles.header}>
-        <ThemedText variant="h2">{selectedFood.name}</ThemedText>
-        <TouchableOpacity onPress={() => setSelectedFood(null)}>
+        <ThemedText variant="h2">{selectedFood?.name || scannedName}</ThemedText>
+        <TouchableOpacity onPress={() => { setSelectedFood(null); }}>
           <ThemedText variant="body" color={theme.textTertiary}>Cambiar</ThemedText>
         </TouchableOpacity>
       </View>
@@ -116,12 +160,12 @@ export default function AddFoodScreen() {
 
         <View style={{ marginTop: 24, alignItems: 'center' }}>
           <ThemedText variant="statSmall" color={theme.primary}>
-            {Math.round(selectedFood.calories * (parseFloat(grams) || 100) / 100)} kcal
+            {Math.round((selectedFood?.calories || scannedCalories) * (parseFloat(grams) || 100) / 100)} kcal
           </ThemedText>
           <ThemedText variant="caption" color={theme.textSecondary}>
-            P: {Math.round(selectedFood.protein * (parseFloat(grams) || 100) / 100 * 10) / 10}g
-            {'  '}C: {Math.round(selectedFood.carbs * (parseFloat(grams) || 100) / 100 * 10) / 10}g
-            {'  '}G: {Math.round(selectedFood.fat * (parseFloat(grams) || 100) / 100 * 10) / 10}g
+            P: {Math.round((selectedFood?.protein || scannedProtein) * (parseFloat(grams) || 100) / 100 * 10) / 10}g
+            {'  '}C: {Math.round((selectedFood?.carbs || scannedCarbs) * (parseFloat(grams) || 100) / 100 * 10) / 10}g
+            {'  '}G: {Math.round((selectedFood?.fat || scannedFat) * (parseFloat(grams) || 100) / 100 * 10) / 10}g
           </ThemedText>
         </View>
 
@@ -147,5 +191,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+  },
+  scanButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    borderRadius: 20,
+    borderWidth: 1,
+    marginBottom: 16,
+  },
+  scanIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
